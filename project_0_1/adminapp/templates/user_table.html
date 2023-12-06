@@ -1,0 +1,91 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  </head>
+  <body>
+    <h1 class="text-center "><b>User table</b> </h1> 
+    
+    <div class=" gap-2 m-4 justify-content-center d-flex">
+    <div class="justify-content-center d-flex  flex-row m-2" ><a class="btn btn-dark " href="{% url 'logoutpage' %}">Logout</a></div>
+    <div class="justify-content-center d-flex flex-row m-2" ><a class="btn btn-dark " href="{% url 'adduser' %}">Add User</a></div>
+    
+    <form method="post" class="d-flex gap-3 align-items-center ">{% csrf_token %}
+      <input class="form-control h-75"  type="search" name="search-box" placeholder="Search" aria-label="Search" id="search-box" autocomplete="off">
+      <button class="btn btn-outline-success h-75 w-50" type="submit">Search</button>
+      <div class="justify-content-center d-flex flex-row m-2" ><a class="btn btn-dark " href="{% url 'tablepage' %}">Back</a></div>
+      </form>
+      
+    
+    </div>
+   
+
+    <div class="container"> <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                
+                
+                <th scope="col">Username</th>
+                
+                <th scope="col">Email</th>
+                <th scope="col">Superuser</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+           {% for i in frm %}
+            <tr>
+                <th scope="row">{{i.id}}</th>
+                <td>{{ i.username }}</td>
+                <td>{{ i.email }}</td>
+                <td scope="row">{{i.is_superuser}}</td>
+                <th>
+                  {% if not i.is_superuser %}
+                    <a class="btn btn-outline-success" href="{% url 'editpage' i.id %}">Edit</a>
+                    <a  class="btn btn-outline-danger" href="{% url 'delete_record' i.id %}">Delete</a>
+                  {% endif %}
+                </th>
+            </tr>
+           {% endfor %}
+        </tbody>
+    </table>
+
+    {% if messages %}
+    {% for message in messages %}
+
+    <div class="alert alert-warning alert-dismissible fade show  m-4" role="alert">
+      {{message}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+</div>
+   
+
+<script>
+  $(document).ready(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+  });
+
+  function u() {
+      document.getElementById('search-word').addEventListener("keyup", function (event) {
+          if (event.keyCode === 13) {
+              var x = document.getElementById("search-box");
+              x.submit();
+              return false;
+          }
+      })
+  }
+</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  </body>
+</html>
